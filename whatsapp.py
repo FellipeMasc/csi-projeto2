@@ -32,8 +32,9 @@ except ModuleNotFoundError:
 
 
 class WhatsAppElements:
-
-    search = (By.CSS_SELECTOR, "#side > div.SgIJV > div > label > div > div._2_1wd.copyable-text.selectable-text")
+    # div._ak9t > div > label > div
+    # search = (By.CSS_SELECTOR, "#side > div.copyable-text.selectable-text")
+    search = (By.CSS_SELECTOR, "div[role='textbox'] > p.selectable-text.copyable-text")
     attach_icon = (By.CSS_SELECTOR, ".bDS3i > div:nth-child(1) > div:nth-child(1) > span:nth-child(1)")
 
 
@@ -43,7 +44,7 @@ class WhatsApp:
     """
     emoji = {}  # This dict will contain all emojies needed for chatting
     browser = None
-    timeout = 10  # The timeout is set for about ten seconds
+    timeout = 100  # The timeout is set for about ten seconds
 
     # This constructor will load all the emojies present in the json file and it will initialize the webdriver
     def __init__(self, wait, screenshot=None, session=None):
@@ -52,16 +53,16 @@ class WhatsApp:
             chrome_options.add_argument("--user-data-dir={}".format(session))
             self.browser = webdriver.Chrome(options=chrome_options)  # we are using chrome as our webbrowser
         else:
-            self.browser = webdriver.Chrome()
+            self.browser = webdriver.Chrome(executable_path = "C:\ITA\Csi-projeto2\chromedriver-win64\chromedriver.exe")
         self.browser.get("https://web.whatsapp.com/")
         # emoji.json is a json file which contains all the emojis
-        with open("emoji.json") as emojies:
-            self.emoji = json.load(emojies)  # This will load the emojies present in the json file into the dict
+        # with open("emoji.json") as emojies:
+        #     self.emoji = json.load(emojies)  # This will load the emojies present in the json file into the dict
         WebDriverWait(self.browser,wait).until(EC.presence_of_element_located(
             WhatsAppElements.search))
         if screenshot is not None:
             self.browser.save_screenshot(screenshot)  # This will save the screenshot to the specified file location
-
+    
     # This method is used to send the message to the individual person or a group
     # will return true if the message has been sent, false else
     def send_message(self, name, message):
@@ -70,7 +71,7 @@ class WhatsApp:
         search.send_keys(name+Keys.ENTER)  # we will send the name to the input key box
         try:
             send_msg = WebDriverWait(self.browser, self.timeout).until(EC.presence_of_element_located(
-                (By.XPATH, "/html/body/div/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]")))
+                (By.XPATH, "/html/body/div[1]/div/div/div[2]/div[4]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]")))
             messages = message.split("\n")
             for msg in messages:
                 send_msg.send_keys(msg)
@@ -94,7 +95,7 @@ class WhatsApp:
         # it is handled safely
         try:
             click_menu = WebDriverWait(self.browser,self.timeout).until(EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "._19vo_ > span:nth-child(1)")))
+                (By.XPATH, "/html/body/div[1]/div/div/div[2]/div[4]/div/header/div[2]/div[2]/span")))
             click_menu.click()
         except TimeoutException:
             raise TimeoutError("Your request has been timed out! Try overriding timeout!")
@@ -102,29 +103,26 @@ class WhatsApp:
             return "None"
         except Exception as e:
             return "None"
-        current_time = dt.datetime.now()
-        participants_selector = "div._2LSbZ:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(1)"
-        while True:
-            try:
-                participants_count = self.browser.find_element_by_css_selector(participants_selector).text
-                if "participants" in participants_count:
-                    return participants_count
-            except Exception as e:
-                pass
-            new_time = dt.datetime.now()
-            elapsed_time = (new_time - current_time).seconds
-            if elapsed_time > self.timeout:
-                return "NONE"
+
+        participants_selector = "/html/body/div[1]/div/div/div[2]/div[5]/span/div/span/div/div/div/section/div[7]/div[1]/div/div[1]/span"
+        elemento = WebDriverWait(self.browser, 100).until(
+        EC.visibility_of_element_located((By.XPATH, participants_selector))
+        )
+        return elemento.text.split(': ')[1]
 
     # This method is used to get all the participants
     def get_group_participants(self, group_name):
-        self.participants_count_for_group(group_name)
-        search = self.browser.find_element(*WhatsAppElements.search)
-        search.send_keys(group_name+Keys.ENTER)  # we will send the name to the input key box
+        a = self.participants_count_for_group(group_name)
+        # search = self.browser.find_element(*WhatsAppElements.search)
+        # search.send_keys(group_name+Keys.ENTER)  
+        # we will send the name to the input key box
         # some say this two try catch below can be grouped into one
         # but I have some version specific issues with chrome [Other element would receive a click]
         # in older versions. So I have handled it spereately since it clicks and throws the exception
         # it is handled safely
+        participants_menu = WebDriverWait(self.browser,self.timeout).until(EC.presence_of_element_located(
+                (By.XPATH, "/html/body/div[1]/div/div/div[2]/div[4]/div/header/div[2]/div[2]/span")))
+        return participants_menu.text
         try:
             click_menu = WebDriverWait(self.browser,self.timeout).until(EC.presence_of_element_located(
                 (By.CSS_SELECTOR, "#main > header > div._1WBXd > div._2EbF- > div > span")))
