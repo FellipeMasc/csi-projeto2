@@ -12,6 +12,7 @@ from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
+from WhatsAppElements import *
 
 class UtilityHandler:
     def __init__(self, browser, timeout):

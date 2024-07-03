@@ -12,9 +12,10 @@ from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
+import requests
 
 class UserInfoHandler:
-    def _init_(self, api_url, api_key):
+    def __init__(self, api_url, api_key):
         self.api_url = api_url
         self.api_key = api_key
 

@@ -12,14 +12,17 @@ from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
-
-class WhatsAppElements:
-    search = (By.CSS_SELECTOR, "#side > div.SgIJV > div > label > div > div._2_1wd.copyable-text.selectable-text")
-    attach_icon = (By.CSS_SELECTOR, ".bDS3i > div:nth-child(1) > div:nth-child(1) > span:nth-child(1)")
+from WebDriverHandler import *
+from MessageHandler import *
+from GroupHandler import *
+from UserInfoHandler import *
+from StarredMessagesHandler import *
+from UnreadMessagesHandler import *
+from UtilityHandler import *
 
 class WhatsApp:
     def __init__(self, wait, screenshot=None, session=None):
-        self.timeout = 10
+        self.timeout = 100
         self.web_driver_handler = WebDriverHandler(session)
         self.browser = self.web_driver_handler.initialize_driver()
         WebDriverWait(self.browser, wait).until(EC.presence_of_element_located(WhatsAppElements.search))
@@ -28,7 +31,7 @@ class WhatsApp:
         
         self.message_handler = MessageHandler(self.browser, self.timeout)
         self.group_handler = GroupHandler(self.browser, self.timeout)
-        self.user_info_handler = UserInfoHandler(self.browser, self.timeout)
+        # self.user_info_handler = UserInfoHandler(self.browser, self.timeout)
         self.starred_messages_handler = StarredMessagesHandler(self.browser, self.timeout)
         self.unread_messages_handler = UnreadMessagesHandler(self.browser, self.timeout)
         self.utility_handler = UtilityHandler(self.browser, self.timeout)
@@ -103,6 +106,11 @@ class WhatsApp:
         self.browser.quit()
 
 # Uso da classe WhatsApp:
-whatsapp = WhatsApp(wait=15)
-whatsapp.send_message("Contato", "Olá, esta é uma mensagem de teste.")
-whatsapp.quit()
+whatsapp = WhatsApp(wait=100)
+# texto = "Olá, esta é uma mensagem de teste.\n"
+    
+# whatsapp.send_message("Holder T26", texto)
+    
+participants = whatsapp.get_group_participants("Computos 26")
+
+print(participants)

@@ -22,6 +22,6 @@ class WebDriverHandler:
         chrome_options = Options()
         if self.session:
             chrome_options.add_argument(f"--user-data-dir={self.session}")
-        self.browser = webdriver.Chrome(options=chrome_options)
+        self.browser = webdriver.Chrome(executable_path = "C:\ITA\Csi-projeto2\chromedriver-win64\chromedriver.exe")
         self.browser.get("https://web.whatsapp.com/")
         return self.browser

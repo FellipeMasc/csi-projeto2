@@ -12,6 +12,8 @@ from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.alert import Alert
+from WhatsAppElements import *
+from selenium.common.exceptions import NoSuchElementException, ElementNotVisibleException
 
 class MessageHandler:
     def __init__(self, browser, timeout):
@@ -23,7 +25,7 @@ class MessageHandler:
         search.send_keys(name + Keys.ENTER)
         try:
             send_msg = WebDriverWait(self.browser, self.timeout).until(
-                EC.presence_of_element_located((By.XPATH, "/html/body/div/div/div/div[4]/div/footer/div[1]/div[2]/div/div[2]"))
+                EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div/div[2]/div[4]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]"))
             )
             messages = message.split("\n")
             for msg in messages:
