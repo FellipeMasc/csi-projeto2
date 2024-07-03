@@ -31,10 +31,10 @@ class WhatsApp:
         
         self.message_handler = MessageHandler(self.browser, self.timeout)
         self.group_handler = GroupHandler(self.browser, self.timeout)
-        # self.user_info_handler = UserInfoHandler(self.browser, self.timeout)
         self.starred_messages_handler = StarredMessagesHandler(self.browser, self.timeout)
         self.unread_messages_handler = UnreadMessagesHandler(self.browser, self.timeout)
         self.utility_handler = UtilityHandler(self.browser, self.timeout)
+        # self.user_info_handler = UserInfoHandler(self.browser, self.timeout)
     
     def send_message(self, name, message):
         return self.message_handler.send_message(name, message)
@@ -107,10 +107,10 @@ class WhatsApp:
 
 # Uso da classe WhatsApp:
 whatsapp = WhatsApp(wait=100)
-# texto = "Olá, esta é uma mensagem de teste.\n"
+texto = "Olá, esta é uma mensagem de teste.\n"
     
-# whatsapp.send_message("Holder T26", texto)
+whatsapp.send_message("Holder T26", texto)
     
-participants = whatsapp.get_group_participants("Computos 26")
+# participants = whatsapp.get_group_participants("Computos 26")
 
-print(participants)
+# print(participants)
