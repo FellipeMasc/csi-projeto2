@@ -107,10 +107,12 @@ class WhatsApp:
 
 # Uso da classe WhatsApp:
 whatsapp = WhatsApp(wait=100)
-texto = "Olá, esta é uma mensagem de teste.\n"
+# texto = "Olá, esta é uma mensagem de teste."
     
-whatsapp.send_message("Holder T26", texto)
+# whatsapp.send_message("Holder T26", texto)
     
-# participants = whatsapp.get_group_participants("Computos 26")
+participants = whatsapp.get_group_participants("Computos 26")
 
-# print(participants)
+print(participants)
+
+whatsapp.quit()

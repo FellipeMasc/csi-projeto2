@@ -141,13 +141,13 @@ class GroupHandler:
         search = self.browser.find_element(*WhatsAppElements.search)
         time.sleep(4)
         search.send_keys(group_name+Keys.ENTER)
-        try:
-            click_menu = WebDriverWait(self.browser,self.timeout).until(EC.presence_of_element_located(
-                (By.XPATH, "/html/body/div[1]/div/div/div[2]/div[4]/div/header/div[2]/div[2]/span")))
-            time.sleep(4)
-            click_menu.click()
-        except TimeoutException:
-            raise TimeoutError("Your request has been timed out! Try overriding timeout!")
+        # try:
+        #     click_menu = WebDriverWait(self.browser,self.timeout).until(EC.presence_of_element_located(
+        #         (By.XPATH, "/html/body/div[1]/div/div/div[2]/div[4]/div/header/div[2]/div[2]/span")))
+        #     time.sleep(4)
+        #     click_menu.click()
+        # except TimeoutException:
+        #     raise TimeoutError("Your request has been timed out! Try overriding timeout!")
         
         participants_menu = WebDriverWait(self.browser,self.timeout).until(EC.presence_of_element_located(
             (By.XPATH, "/html/body/div[1]/div/div/div[2]/div[4]/div/header/div[2]/div[2]/span")))
